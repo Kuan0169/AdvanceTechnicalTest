@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Models
 {
-    internal class ProductModel
+    public class ProductModel
     {
+        public Guid Id { get; set; }
+        [Required, MaxLength(100)]
+        public required string Name { get; set; }
+        public string Description { get; set; }
+        [Range(, double.MaxValue)]
+        public decimal Price { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

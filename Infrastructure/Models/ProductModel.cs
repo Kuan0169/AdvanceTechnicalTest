@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Infrastructure.Models
+namespace MyCompany.Test.Infrastructure.Models
+{
 {
     public class ProductModel
     {

@@ -2,7 +2,7 @@
 using MyCompany.Test.Infrastructure.Models;
 using MyCompany.Test.Infrastructure.Services;
 
-namespace MyCompany.Api.Controllers;
+namespace MyCompany.Test.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Services
+namespace MyCompany.Test.Infrastructure.Services
 {
-    internal class ProductService
+    public class ProductService
     {
+
     }
 }

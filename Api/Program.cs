@@ -2,9 +2,9 @@ using Microsoft.EntityFrameworkCore; // Ensure this is included
 using MyCompany.Test.Core;
 using MyCompany.Test.Infrastructure.Services;
 using Scalar.AspNetCore;
-
 // Add the following using directive to resolve the 'UseSqlServer' method
 using Microsoft.EntityFrameworkCore.SqlServer;
+using ApiMyCompany.Test.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +27,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 

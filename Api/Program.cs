@@ -4,7 +4,7 @@ using MyCompany.Test.Infrastructure.Services;
 using Scalar.AspNetCore;
 // Add the following using directive to resolve the 'UseSqlServer' method
 using Microsoft.EntityFrameworkCore.SqlServer;
-using ApiMyCompany.Test.Api;
+using Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +28,8 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+app.UseRouting();
 
 app.UseHttpsRedirection();
 

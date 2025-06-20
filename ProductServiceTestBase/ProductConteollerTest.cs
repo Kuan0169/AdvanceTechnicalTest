@@ -57,10 +57,11 @@ namespace Api.Tests
         public async Task GetById_NonExistingId_ReturnsNotFound()
         {
             // Arrange
-            _mockService.Setup(s => s.GetByIdAsync(It.IsAny<Guid>())).ThrowsAsync(new Exception("Product not found"));
+            var nonExistentId = Guid.NewGuid();
+            _mockService.Setup(s => s.GetByIdAsync(nonExistentId)).ReturnsAsync((ProductDto)null);
 
             // Act
-            var result = await _controller.GetById(Guid.NewGuid());
+            var result = await _controller.GetById(nonExistentId);
 
             // Assert
             Assert.IsType<NotFoundResult>(result);

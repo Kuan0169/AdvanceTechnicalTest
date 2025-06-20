@@ -21,17 +21,14 @@ public class ProductController(IProductService productService) : ControllerBase
     [Route("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        try
+        var product = await _productService.GetByIdAsync(id);   
+
+        if (product == null)
         {
-            var product = await _productService.GetByIdAsync(id);
-            return Ok(product);
+            return NotFound();
         }
-        catch (Exception ex)
-        {
-            if (ex.Message == "Product not found")
-                return NotFound();
-        }
-        return StatusCode(500, "Internal server error");
+
+        return Ok(product);
     }
 
     [HttpPost]

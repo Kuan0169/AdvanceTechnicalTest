@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MyCompany.Test.Api.Exceptions;
 using MyCompany.Test.Core;
 using MyCompany.Test.Core.Entities;
 using MyCompany.Test.Infrastructure.Models;
@@ -36,7 +37,9 @@ namespace MyCompany.Test.Infrastructure.Services
         }
         public async Task<ProductDto> GetByIdAsync(Guid id)
         {
-            var product = await context.Product.Where(p => p.ProductId == id).Select(c => new ProductDto
+            var product = await context.Product
+                .Where(p => p.ProductId == id)
+                .Select(c => new ProductDto
             {
                 Id = c.ProductId,
                 Name = c.Name,
@@ -47,7 +50,7 @@ namespace MyCompany.Test.Infrastructure.Services
 
             if (product == null)
             {
-                throw new Exception("Product not found");
+                throw new NotFoundException($"Product with ID {id} not found");
             }
             return product;
         }
@@ -80,7 +83,7 @@ namespace MyCompany.Test.Infrastructure.Services
             var product = await context.Product.Where(c => c.ProductId == id).FirstOrDefaultAsync();
             if (product == null)
             {
-                throw new Exception("Product not found");
+                throw new NotFoundException("Product not found");
             }
 
             product.ProductId = id;
@@ -96,10 +99,12 @@ namespace MyCompany.Test.Infrastructure.Services
         public async Task DeleteAsync(Guid id)
         {
             var product = await context.Product.Where(c => c.ProductId == id).FirstOrDefaultAsync();
+            
             if (product == null)
             {
-                throw new Exception("Product not found");
+                throw new NotFoundException("Product not found");
             }
+
             context.Product.Remove(product);
             await context.SaveChangesAsync();
         }

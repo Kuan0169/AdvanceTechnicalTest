@@ -21,13 +21,7 @@ public class ProductController(IProductService productService) : ControllerBase
     [Route("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var product = await _productService.GetByIdAsync(id);   
-
-        if (product == null)
-        {
-            return NotFound();
-        }
-
+        var product = await _productService.GetByIdAsync(id);
         return Ok(product);
     }
 
@@ -48,33 +42,16 @@ public class ProductController(IProductService productService) : ControllerBase
         {
             return BadRequest(ModelState);
         }
-        try
-        {
-            await _productService.UpdateAsync(id, productModel);
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
+
+        await _productService.UpdateAsync(id, productModel);
+        return NoContent();
     }
 
     [HttpDelete]
     [Route("{id:guid}")]
     public async Task<IActionResult> DeleteAsync(Guid id)
     {
-        try
-        {
-            await _productService.DeleteAsync(id);
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            if (ex.Message == "Product not found")
-            {
-                return NotFound();
-            }
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
+        await _productService.DeleteAsync(id);
+        return NoContent();
     }
 }

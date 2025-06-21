@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using MyCompany.Test.Api.Controllers;
+using MyCompany.Test.Api.Exceptions;
 using MyCompany.Test.Infrastructure.Models;
 
 namespace Api.Tests
@@ -54,17 +55,20 @@ namespace Api.Tests
         }
 
         [Fact]
-        public async Task GetById_NonExistingId_ReturnsNotFound()
+        public async Task GetById_NonExistingId_ThrowsNotFoundException()
         {
             // Arrange
             var nonExistentId = Guid.NewGuid();
-            _mockService.Setup(s => s.GetByIdAsync(nonExistentId)).ReturnsAsync((ProductDto)null);
 
-            // Act
-            var result = await _controller.GetById(nonExistentId);
+            _mockService
+                .Setup(s => s.GetByIdAsync(nonExistentId))
+                             .ThrowsAsync(new NotFoundException("Product not found"));
 
-            // Assert
-            Assert.IsType<NotFoundResult>(result);
+            // Act & Assert
+            var ex = await Assert.ThrowsAsync<NotFoundException>(() =>
+                _controller.GetById(nonExistentId));
+
+            Assert.Equal("Product not found", ex.Message);
         }
 
         [Fact]
@@ -141,7 +145,7 @@ namespace Api.Tests
         }
 
         [Fact]
-        public async Task UpdateAsync_ProductNotFound_ReturnsInternalServerError()
+        public async Task UpdateAsync_ProductNotFound_ThrowsException()
         {
             var id = Guid.NewGuid();
             var model = new ProductModel
@@ -151,13 +155,15 @@ namespace Api.Tests
                 Description = "Updated Desc",
                 CreatedAt = DateTime.UtcNow
             };
-            _mockService.Setup(s => s.UpdateAsync(id, model)).ThrowsAsync(new Exception("Product not found"));
-            // Act
-            var result = await _controller.UpdateAsync(id, model);
-            // Assert
-            var statusResult = Assert.IsType<ObjectResult>(result);
-            Assert.Equal(500, statusResult.StatusCode);
-            Assert.Contains("Product not found", statusResult.Value.ToString());
+            _mockService
+                .Setup(s => s.UpdateAsync(id, model))
+                .ThrowsAsync(new NotFoundException("Product not found"));
+
+            // Act & Assert
+            var ex = await Assert.ThrowsAsync<NotFoundException>(() =>
+                _controller.UpdateAsync(id, model));
+
+            Assert.Equal("Product not found", ex.Message);
         }
 
         [Fact]
@@ -175,16 +181,18 @@ namespace Api.Tests
         }
 
         [Fact]
-        public async Task Delete_NonExistingProduct_ReturnsNotFound()
+        public async Task Delete_NonExistingProduct_ThrowsNotFoundException()
         {
             // Arrange
-            _mockService.Setup(s => s.DeleteAsync(It.IsAny<Guid>())).ThrowsAsync(new Exception("Product not found"));
+            var id = Guid.NewGuid();
+            _mockService.Setup(s => s.DeleteAsync(id))
+                        .ThrowsAsync(new NotFoundException("Product not found"));
 
-            // Act
-            var result = await _controller.DeleteAsync(Guid.NewGuid());
+            // Act & Assert
+            var ex = await Assert.ThrowsAsync<NotFoundException>(() =>
+                _controller.DeleteAsync(id));
 
-            // Assert
-            Assert.IsType<NotFoundResult>(result);
+            Assert.Equal("Product not found", ex.Message);
         }
     }
 }

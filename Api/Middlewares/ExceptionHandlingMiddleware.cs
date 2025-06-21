@@ -1,10 +1,5 @@
-﻿using Microsoft.Identity.Client;
-using System.Diagnostics.Eventing.Reader;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using System.Net;
-using System.Threading.Tasks;
-using System.Text.Json;
+﻿using System.Text.Json;
+using MyCompany.Test.Api.Exceptions;
 
 namespace MyCompany.Test.Api.Middlewares
 {
@@ -23,17 +18,23 @@ namespace MyCompany.Test.Api.Middlewares
         {
             try
             {
-                await _next(context); // 繼續下個 middleware 或 controller
+                await _next(context);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unhandled exception occurred.");
 
                 context.Response.ContentType = "application/json";
-                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                context.Response.StatusCode = ex switch
+                {
+                    NotFoundException _ => StatusCodes.Status404NotFound,
+                    AggregateException _ => StatusCodes.Status400BadRequest,
+                    _ => StatusCodes.Status500InternalServerError
+                };
 
                 var response = new
                 {
+                    error = ex.GetType().Name,
                     message = ex.Message,
                     statusCode = context.Response.StatusCode
                 };

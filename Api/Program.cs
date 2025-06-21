@@ -4,7 +4,8 @@ using MyCompany.Test.Infrastructure.Services;
 using Scalar.AspNetCore;
 // Add the following using directive to resolve the 'UseSqlServer' method
 using Microsoft.EntityFrameworkCore.SqlServer;
-using Api.Middlewares;
+using MyCompany.Test.Api.Middlewares;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

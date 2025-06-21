@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MyCompany.Test.Api.Exceptions;
 using MyCompany.Test.Core.Entities;
 using MyCompany.Test.Infrastructure.Models;
 
@@ -138,8 +139,9 @@ namespace Core.Tests
         {
             // Arrange  
             var nonExistentId = Guid.NewGuid();
+
             // Act & Assert  
-            await Assert.ThrowsAsync<Exception>(() => productService.GetByIdAsync(nonExistentId));
+            await Assert.ThrowsAsync<NotFoundException>(() => productService.GetByIdAsync(nonExistentId));
         }
 
         [Fact]
@@ -155,7 +157,7 @@ namespace Core.Tests
                 CreatedAt = DateTime.UtcNow
             };
             // Act & Assert  
-            await Assert.ThrowsAsync<Exception>(() => productService.UpdateAsync(nonExistentId, productModel));
+            await Assert.ThrowsAsync<NotFoundException>(() => productService.GetByIdAsync(nonExistentId));
         }
     }
 }

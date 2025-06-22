@@ -117,16 +117,16 @@ Running Tests
 
 Implemented Features
 
-Feature	                         Status	                 Description
-EF Core Persistence	         ✅ Implemented	         SQL Server database
-DTO Pattern	                 ✅ Implemented	         ProductDto and ProductModel
-Global Exception Handling	 ✅ Implemented	         Custom middleware
-Model Validation	         ✅ Implemented	         Data Annotations
-Unit Testing	                 ✅ Implemented	         Full controller/service coverage
-OpenAPI Documentation	         ✅ Implemented	         Swagger UI integration
-JWT Authentication	         ❌ Not Implemented	
-Health Checks	                 ❌ Not Implemented	
-CI/CD Pipeline	                 ❌ Not Implemented	
+	Feature	                         Status	                 Description
+	EF Core Persistence	         ✅ Implemented	         SQL Server database
+	DTO Pattern	                 ✅ Implemented	         ProductDto and ProductModel
+	Global Exception Handling	 ✅ Implemented	         Custom middleware
+	Model Validation	         ✅ Implemented	         Data Annotations
+	Unit Testing	                 ✅ Implemented	         Full controller/service coverage
+	OpenAPI Documentation	         ✅ Implemented	         Swagger UI integration
+	JWT Authentication	         ❌ Not Implemented	
+	Health Checks	                 ❌ Not Implemented	
+	CI/CD Pipeline	                 ❌ Not Implemented	
 
 
 Design Decisions
